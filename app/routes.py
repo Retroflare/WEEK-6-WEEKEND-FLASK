@@ -8,7 +8,7 @@ from random import randint
 
 @app.route('/')
 def homepage():
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 @app.route('/pokemon', methods=["GET", "POST"])
 def pokemon():
@@ -68,17 +68,17 @@ def pokemon():
                     else:
                         flash("That Pokemon already has a trainer.")
                         return redirect(url_for('pokemon'))
-            return render_template('pokemon.html', form = form, the_pokemon = the_pokemon)
+            return render_template('pokemon.jinja', form = form, the_pokemon = the_pokemon)
             
             
         
     elif request.method == "GET":
-        return render_template('pokemon.html', form = form)
+        return render_template('pokemon.jinja', form = form)
     
 @app.route('/mypokemon')
 def mypokemon():
     pokemons = Pokemon.query.filter_by(user_id = current_user.id)
-    return render_template('mypokemon.html', pokemons = pokemons)
+    return render_template('mypokemon.jinja', pokemons = pokemons)
 
 @app.route('/battle', methods = ["GET", "POST"])
 def battle():
@@ -98,7 +98,7 @@ def battle():
                     opponent_user_name = opponents[randomindex].user_name
                 opp = User.query.filter_by(user_name = opponent_user_name).first()
                 enemy_pokemons = Pokemon.query.join(User).filter(User.user_name == opponent_user_name).all()
-                return render_template('battle.html', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
+                return render_template('battle.jinja', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
             else:
                 opp = User.query.filter_by(user_name = opponent_user_name).first()
                 kills = opp.kills
@@ -113,11 +113,11 @@ def battle():
                         pokemon1 = Pokemon.query.filter_by(pokemon_name = attacker).first()
                         pokemon2 = Pokemon.query.filter_by(pokemon_name = defender).first()
                         return redirect(url_for('fight'))
-                    return render_template('battle.html', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp, kills = kills, deaths = deaths)
+                    return render_template('battle.jinja', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp, kills = kills, deaths = deaths)
                 else:
                     flash("User does not exist.")
                     return redirect(url_for('battle'))
-    return render_template('battle.html', pokemons = pokemons, form = form, opponentform = opponentform)
+    return render_template('battle.jinja', pokemons = pokemons, form = form, opponentform = opponentform)
 
 @app.route('/battle/<opponent_user_name>/fight', methods = ["GET", "POST"])
 def fight(opponent_user_name):
@@ -167,10 +167,10 @@ def fight(opponent_user_name):
             if not pokemon2:
                 form.defender.data = ''
             opp = User.query.filter_by(user_name = opponent_user_name).first()
-            return render_template('battle.html', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
-        return render_template('battle.html', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
+            return render_template('battle.jinja', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
+        return render_template('battle.jinja', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
         
-    return render_template('battle.html', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
+    return render_template('battle.jinja', pokemons = pokemons, form = form, opponentform = opponentform, enemy_pokemons = enemy_pokemons, opponent_user_name = opponent_user_name, opp = opp)
 
 @app.route('/mypokemon/<pokemon_id>/delete')
 def delete_pokemon(pokemon_id):
@@ -199,11 +199,11 @@ def signup():
             flash("You created an account. Please log in.")
             return redirect(url_for('signin'))
         else:
-            flash("Invalid input. Please try again.")
-            return render_template('signup.html', form = form)
+            flash("Invalid input. Please try again!.")
+            return render_template('signup.jinja', form = form)
     
     elif request.method == "GET":
-        return render_template('signup.html', form = form)
+        return render_template('signup.jinja', form = form)
 
 @app.route('/signin', methods = ['GET', 'POST'])
 def signin():
@@ -227,10 +227,10 @@ def signin():
                 flash("User does not exist")
                 return redirect(url_for('signin'))
             
-        return render_template('signin.html', form = form)
+        return render_template('signin.jinja', form = form)
     
     elif request.method == 'GET':
-        return render_template('signin.html', form = form)
+        return render_template('signin.jinja', form = form)
     
 @app.route('/logout')
 def logout():
@@ -260,10 +260,10 @@ def profile():
             return redirect(url_for('profile'))
         else:
             flash("Invalid input. Please try again.")
-            return render_template('profile.html', form = form)
+            return render_template('profile.jinja', form = form)
     
     elif request.method == "GET":
-        return render_template('profile.html', form = form)
+        return render_template('profile.jinja', form = form)
     
 @app.route('/pokemonapi')
 def pokemonapi():

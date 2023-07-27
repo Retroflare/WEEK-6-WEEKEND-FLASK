@@ -1,0 +1,46 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+
+<h1 style="text-align:center; margin-top: 3%">Pokemon-Catcher</h1>
+<p style="text-align:center; font-weight:500">(Enter "random" to test your luck!)</p>
+<div style="text-align:center">
+    <form method="POST" class="container col-3">
+        {{ form.hidden_tag() }}
+        {{ form.pokemon_name(style="margin-top:1rem", class='form-control', placeholder='Pokemon name', autocomplete='off') }}
+        {{ form.submit(value="Catch!", style="margin-top:1rem", class="btn btn-primary btn-lg") }}
+    </form>
+</div>
+
+{% if the_pokemon %}
+
+<div style="text-align:center; margin-top: 2rem">
+    {% if current_user.is_authenticated %}
+        <h2>You caught this Pokemon!</h2>
+    {% else %}
+        <h2>You found this Pokemon!</h2>
+    {% endif %}
+    {% if the_pokemon.front_shiny_sprite == None and the_pokemon.other_sprite == None %}
+    <img style="width:95px" src="{{ the_pokemon.questionmark }}" alt="{{ the_pokemon.pokemon_name }}">
+    {% elif the_pokemon.front_shiny_sprite == None %}
+    <img style="width:95px" src="{{ the_pokemon.other_sprite }}" alt="{{ the_pokemon.pokemon_name }}">
+    {% else %}
+    <img src="{{ the_pokemon.front_shiny_sprite }}" alt="{{ the_pokemon.pokemon_name }}">
+    {% endif %}
+    <h3>Name: {{ the_pokemon.pokemon_name.capitalize() }} </h3>
+    <h3>Health: {{ the_pokemon.base_hp }} </h3>
+    <h3>Attack: {{ the_pokemon.base_attack }} </h3>
+    <h3>Defense: {{ the_pokemon.base_defense }} </h3>
+</div>
+
+{% endif %}
+
+{% if the_pokemon == None %}
+
+<div style="text-align:center; margin-top: 2rem">
+    <p>That Pokemon doesn't exist. Please try again!</p>
+</div>
+
+{% endif %}
+
+{% endblock %}
